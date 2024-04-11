@@ -1,6 +1,8 @@
+import styles from "./about.module.css"
+
 const AboutPage = () => {
   return (
-    <div>AboutPage</div>
+    <div className={styles.container}>AboutPage</div>
   )
 }
 

@@ -1,15 +1,66 @@
+"use client"
+
 import Link from "next/link"
+import { useState } from "react"
+import NavLink from "./navLink/NavLink"
+import styles from "./navbar.module.css"
+
+const links = [
+  {
+    title: "Homepage",
+    path: "/",
+  },
+  {
+    title: "About",
+    path: "/about",
+  },
+  {
+    title: "Contact",
+    path: "/contact",
+  },
+  {
+    title: "Blog",
+    path: "/blog",
+  },
+]
+
+// Temp roles
+const session = true
+const isAdmin = true
 
 const Navbar = () => {
+  const [ isOpen, setIsOpen ] = useState(false)
+
   return (
-    <nav>
-        <a href="/">Logo</a>
-      <ul>
-        <li><Link href="/">Home</Link></li>
-        <li><Link href="/about">About</Link></li>
-        <li><Link href="/contact">Contact</Link></li>
-        <li><Link href="/blog">Blog</Link></li>
+    <nav className={styles.container}>
+      <Link className={styles.logo} href="/">Logo</Link>
+      <ul className={styles.links}>
+        {links.map(link => <NavLink key={link.title} item={link} />)}
+        {session ? (
+          <>
+            { isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} /> }
+            <button className={styles.logout}>Logout</button>
+          </>
+        ) : (
+          <NavLink item={{ title: "Login", path: "/login" }} />
+        )}
       </ul>
+      <button className={styles.menuButton} onClick={() => setIsOpen((prevState) => !prevState)}>Menu</button>
+      {
+        isOpen && (
+          <ul className={styles.mobileLinks}>
+            {links.map(link => <NavLink key={link.title} item={link} />)}
+            {session ? (
+              <>
+                { isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} /> }
+                <button className={styles.logout}>Logout</button>
+              </>
+            ) : (
+              <NavLink item={{ title: "Login", path: "/login" }} />
+            )}
+          </ul>
+        )
+      }
     </nav>
   )
 }

@@ -1,6 +1,8 @@
+import styles from "./admin.module.css"
+
 const AdminPage  = () => {
   return (
-    <div>AdminPage  </div>
+    <div className={styles.container}>AdminPage  </div>
   )
 }
 

@@ -36,6 +36,8 @@
   .menuButton {
     display: block;
     cursor: pointer;
+    background-color: transparent;
+    border: none;
   }
 
   .mobileLinks {

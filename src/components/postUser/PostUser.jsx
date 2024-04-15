@@ -1,9 +1,10 @@
 import styles from "./postUser.module.css"
 import Image from "next/image"
+import {getUser} from "@/lib/data";
 
 const getData = async (userId) => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`, 
-    { next: { revalidate: 3600 } } // revalidate 3600 will keep in cache the response for 1 hour
+    { cache: "no-store" }
   );
   if (!res.ok) {
     throw new Error("Something went wrong")
@@ -13,20 +14,24 @@ const getData = async (userId) => {
 }
 
 const PostUser = async ({ userId }) => {
-  const user = await getData(userId)
+  // get user from api
+  // const user = await getData(userId)
+
+  // get user from mongo db
+  const user = await getUser(userId)
 
   return (
     <div className={styles.container}>
       <Image
         className={styles.avatar}
-        src="/noavatar.png"
+        src={user.img || "/noavatar.png"}
         alt=""
         width={50}
         height={50}
       />
       <div className={styles.texts}>
         <span className={styles.title}>Author</span>
-        <span className={styles.username}>{user.name}</span>
+        <span className={styles.username}>{user.username}</span>
       </div>
     </div>
   );

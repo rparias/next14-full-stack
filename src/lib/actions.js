@@ -1,10 +1,11 @@
+"use server"
+
 import {connectToDB} from "@/lib/connectToDB";
 import {Post} from "@/lib/models";
 import {revalidatePath} from "next/cache";
+import {signIn, signOut} from "@/lib/auth";
 
 export const addPost = async (formData) => {
-  "use server" // this function will be executed on server
-
   const { title, body, slug, userId } = Object.fromEntries(formData)
 
   try {
@@ -31,8 +32,6 @@ export const addPost = async (formData) => {
 }
 
 export const deletePost = async (formData) => {
-  "use server" // this function will be executed on server
-
   const { id } = Object.fromEntries(formData)
 
   try {
@@ -48,4 +47,12 @@ export const deletePost = async (formData) => {
       error: "Something went wrong when adding Post",
     }
   }
+}
+
+export const handleGithubLogin = async () => {
+  await signIn("github")
+}
+
+export const handleGithubLogout = async () => {
+  await signOut()
 }

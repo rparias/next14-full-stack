@@ -15,6 +15,17 @@ const getData = async (slug) => {
   return res.json() 
 }
 
+export const generateMetadata = async ({ params }) => {
+  const { slug } = params
+
+  const post = await getPost(slug) // this request won't be executed twice because Next is handling it properly
+
+  return {
+    title: post.title,
+    description: post.body,
+  }
+}
+
 const SinglePostPage = async ({ params }) => {
   const { slug } = params
 

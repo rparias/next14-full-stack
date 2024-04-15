@@ -17,7 +17,7 @@ const PostUser = async ({ userId }) => {
   // get user from api
   // const user = await getData(userId)
 
-  // get user from mongo db
+  // get user from mongo db without api
   const user = await getUser(userId)
 
   return (

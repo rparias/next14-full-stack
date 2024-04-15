@@ -24,6 +24,16 @@ export const getPost = async (slug) => {
   }
 }
 
+export const deletePost = async (slug) => {
+  try {
+    await connectToDB();
+    await Post.deleteOne({slug});
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch single post from DB");
+  }
+}
+
 export const getUsers = async () => {
   try {
     await connectToDB();

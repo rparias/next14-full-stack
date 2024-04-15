@@ -3,7 +3,8 @@ import PostCard from "@/components/postCard/PostCard"
 import {getPosts} from "@/lib/data";
 
 const getData = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts", 
+  // const res = await fetch("https://jsonplaceholder.typicode.com/posts",
+  const res = await fetch("http://localhost:3000/api/blog",
     { next: { revalidate: 3600 } } // revalidate 3600 will keep in cache the response for 1 hour
   );
   if (!res.ok) {
@@ -15,10 +16,10 @@ const getData = async () => {
 
 const BlogPage = async () => {
   // get posts from api
-  // const posts = await getData();
+  const posts = await getData();
 
-  // get posts from mongo db
-  const posts = await getPosts()
+  // get posts from mongo db without api
+  // const posts = await getPosts()
 
   return (
     <div className={styles.container}>

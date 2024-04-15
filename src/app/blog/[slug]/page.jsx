@@ -5,7 +5,8 @@ import {Suspense} from "react"
 import {getPost} from "@/lib/data";
 
 const getData = async (slug) => {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`, 
+  // const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${slug}`,
+  const res = await fetch(`http://localhost:3000/api/blog/${slug}`,
     { next: { revalidate: 3600 } } // revalidate 3600 will keep in cache the response for 1 hour
   );
   if (!res.ok) {
@@ -30,10 +31,10 @@ const SinglePostPage = async ({ params }) => {
   const { slug } = params
 
   // get post from api
-  // const post = await getData(slug)
+  const post = await getData(slug)
 
-  // get post from mongo db
-  const post = await getPost(slug)
+  // get post from mongo db without api
+  // const post = await getPost(slug)
 
   return (
     <div className={styles.container}>

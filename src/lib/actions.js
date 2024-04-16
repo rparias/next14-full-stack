@@ -58,11 +58,11 @@ export const handleGithubLogout = async () => {
   await signOut()
 }
 
-export const register = async (formData) => {
+export const register = async (previousState, formData) => {
   const { username, email, password, passwordRepeat, img } = Object.fromEntries(formData);
 
   if (password !== passwordRepeat) {
-    return "Passwords don't match";
+    return { error: "Passwords do not match" };
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -73,7 +73,7 @@ export const register = async (formData) => {
 
     const user = await User.findOne({ username });
     if (user) {
-      return "Username already exists";
+      return { error: "Username already exists" };
     }
 
     const newUser = await User.create({
@@ -85,17 +85,22 @@ export const register = async (formData) => {
 
     await newUser.save();
 
+    return { success: true } // this info will be saved on the state on the useFormState
+
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong when adding User" }
   }
 }
 
-export const login = async (formData) => {
+export const login = async (previousState, formData) => {
   const { username, password } = Object.fromEntries(formData);
 
   try {
     await signIn("credentials", { username, password });
+
+    return { success: true } // this info will be saved on the state on the useFormState
+
   } catch (error) {
     console.log(error);
 

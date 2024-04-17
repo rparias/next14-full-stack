@@ -3,12 +3,20 @@
 import { addUser } from "@/lib/actions";
 import styles from "./adminUserForm.module.css";
 import { useFormState } from "react-dom";
+import { useEffect, useRef } from "react";
 
 const AdminUserForm = () => {
   const [state, formAction] = useFormState(addUser, undefined);
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (state?.success) {
+      ref.current.reset();
+    }
+  }, [state?.success, ref]);
 
   return (
-    <form action={formAction} className={styles.container}>
+    <form ref={ref} action={formAction} className={styles.container}>
       <h1>Add New User</h1>
       <input type="text" name="username" placeholder="username" />
       <input type="text" name="email" placeholder="email" />

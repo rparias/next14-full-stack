@@ -25,6 +25,8 @@ export const addPost = async (previousState, formData) => {
     revalidatePath("/blog") // this will refresh the data on the blog page
     revalidatePath("/admin") // this will refresh the data on the admin page
 
+    return { success: true } // this info will be saved on the state on the useFormState
+
   } catch (error) {
     console.log(error);
     return {
@@ -72,6 +74,8 @@ export const addUser = async (previousState, formData) => {
     console.log("User saved to DB")
 
     revalidatePath("/admin") // this will refresh the data on the admin page
+
+    return { success: true } // this info will be saved on the state on the useFormState
 
   } catch (error) {
     console.log(error);

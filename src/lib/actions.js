@@ -6,7 +6,7 @@ import {revalidatePath} from "next/cache";
 import {signIn, signOut} from "@/lib/auth";
 import bcrypt from "bcryptjs";
 
-export const addPost = async (formData) => {
+export const addPost = async (previousState, formData) => {
   const { title, body, slug, userId } = Object.fromEntries(formData)
 
   try {
@@ -23,6 +23,7 @@ export const addPost = async (formData) => {
     console.log("Post saved to DB")
 
     revalidatePath("/blog") // this will refresh the data on the blog page
+    revalidatePath("/admin") // this will refresh the data on the admin page
 
   } catch (error) {
     console.log(error);
@@ -37,10 +38,61 @@ export const deletePost = async (formData) => {
 
   try {
     await connectToDB()
-    Post.findByIdAndDelete(id)
+    await Post.findByIdAndDelete(id)
     console.log("Post deleted from DB")
 
     revalidatePath("/blog") // this will refresh the data on the blog page
+    revalidatePath("/admin") // this will refresh the data on the admin page
+
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Something went wrong when adding Post",
+    }
+  }
+}
+
+export const addUser = async (previousState, formData) => {
+  const { username, email, password, img } = Object.fromEntries(formData)
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  try {
+    await connectToDB()
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      img
+    })
+
+    await newUser.save()
+    console.log("User saved to DB")
+
+    revalidatePath("/admin") // this will refresh the data on the admin page
+
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Something went wrong when adding User",
+    }
+  }
+
+}
+
+export const deleteUser = async (formData) => {
+  const { id } = Object.fromEntries(formData)
+
+  try {
+    await connectToDB()
+
+    await Post.deleteMany({ userId: id })
+    await User.findByIdAndDelete(id)
+    console.log("User deleted from DB")
+
+    revalidatePath("/admin") // this will refresh the data on the admin page
 
   } catch (error) {
     console.log(error);
